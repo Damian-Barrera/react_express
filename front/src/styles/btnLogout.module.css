@@ -1,12 +1,14 @@
-.atras {
+.exit {
   display: flex;
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 10px;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
 }
-
-.atras button {
-  background-color: #4a90e2;
+.exit button {
+  background-color: #e24a4a;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -16,14 +18,12 @@
   transition: all 0.2s ease-in-out;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.atras button:hover {
-  background-color: #357ab8;
+.exit button:hover {
+  background-color: #c94242;
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
-
-.atras button:active {
+.exit button:active {
   transform: translateY(0);
   box-shadow: 0 3px 5px #00000033;
 }

@@ -2,18 +2,43 @@ import express from "express";
 import cors from "cors";
 import pool from "./db_config.js";
 import bcrypt from "bcrypt";
+import session from "express-session";
 
 const PORT = 3000;
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173", //modificar esta ruta en producción
+    origin: "http://localhost:5173",
+    credentials: true, //modificar esta ruta en producción
   })
 );
+
+app.use(express.static("public"));
+
+app.use(
+  session({
+    secret: "practico integrador react-express",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 10,
+      secure: false,   // NECESARIO en localhost
+      httpOnly: true,
+      sameSite: "lax"
+    }
+  })
+);
+
+
+
 
 // app.use(express.static("."));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.get("/configuracion", (req, res) => {
+  res.sendFile("config.html", { root: '.' }); //Usar el servidor 3000
+})
 
 app.post("/api/registro", async (req, res) => {
   const { nombre, apellido, email, password, password2 } = req.body;
@@ -77,13 +102,55 @@ app.post("/api/login", async (req, res) => {
       }
 
       //Si todo esta bien
-      res.json({mensaje: "login exitoso", usuario: user[0].nombre, email: user[0].email})
+      req.session.user = {
+        id:user[0].id,
+        is_admin: user[0].is_admin  
+      }
+      res.json({mensaje: "login exitoso", usuario: user[0]});
 
   } catch (error) {
     console.log(error)
     res.status(500).json({mensaje:"error en el servidor"})
   }
 });
+
+app.get("/api/me", async (req, res) => {
+  
+  if (!req.session.user) {
+    return res.json({ usuario: null });
+  }
+
+  try {
+    const id = req.session.user.id;
+
+    const [rows] = await pool.query(
+      "SELECT id, nombre, apellido, email, is_admin FROM all_users WHERE id = ?",
+      [id]
+    );
+
+    if (rows.length === 0) {
+      return res.json({ usuario: null });
+    }
+
+    return res.json({ usuario: rows[0] });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ mensaje: "error en el servidor" });
+  }
+});
+
+//Cerrando la sesion
+
+app.post("/api/logout", (req, res) => {
+  req.session.destroy( err => {
+    if(err){
+      return res.status(500).json({mensaje:"no se pudo cerrar la sesión"})
+    }
+    res.clearCookie("connect.sid"); 
+    res.json({mensaje:"sesión cerrada correctamente"})
+  } )
+})
+
 
 app.listen(PORT, () => {
   console.log("Servidor corriendo en el puerto 3000");

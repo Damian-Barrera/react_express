@@ -2,7 +2,7 @@ import { useState } from "react"
 import Atras from "./Atras"
 import { NavLink } from "react-router-dom"
 import registrarUsuario from "../services/index";
-
+import { FaHome } from "react-icons/fa";
 
 
 const Registro = () => {
@@ -36,6 +36,11 @@ const Registro = () => {
 
     return (
         <>
+            <div className="home">
+                <NavLink to="/">  <FaHome className="home" title="Inicio" />
+                    Inicio
+                </NavLink>
+            </div>
             <div className="form-container">
                 <form className="formulario" onSubmit={register} >
                     <label htmlFor="nombre">Nombre</label>

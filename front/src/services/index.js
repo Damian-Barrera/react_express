@@ -19,6 +19,8 @@ export const iniciarSesion = async (datos) => {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(datos),
+            credentials: "include",
+
     });
     return await res.json();
   } catch (error) {

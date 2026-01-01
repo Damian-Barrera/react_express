@@ -40,7 +40,7 @@ const Login = () => {
         <>
             <div className="home">
                 <NavLink to="/">  <FaHome className="home" title="Inicio" />
-                    Inicio
+                     
                 </NavLink>
             </div>
             <div className="form-container">

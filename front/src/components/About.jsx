@@ -66,7 +66,7 @@ const About = () => {
     return (
         <div>
             <div className="home">
-                <NavLink to="/">  <FaHome className="home" title="Inicio" />
+                <NavLink to="/dashboard">  <FaHome className="home" title="Inicio" />
                     Inicio
                 </NavLink>
             </div>

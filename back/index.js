@@ -124,7 +124,7 @@ app.get("/api/me", async (req, res) => {
     const id = req.session.user.id;
 
     const [rows] = await pool.query(
-      "SELECT id, nombre, apellido, email, is_admin FROM all_users WHERE id = ?",
+      "SELECT id, nombre, apellido, email,mensaje, telefono , direccion is_admin FROM all_users WHERE id = ?",
       [id]
     );
 
@@ -151,6 +151,29 @@ app.post("/api/logout", (req, res) => {
   } )
 })
 
+//Actualizar perfil
+
+app.put("/api/edit" , async (req, res) => {
+  if(!req.session.user) {
+    return res.status(401).json({mensaje: "No autorizado"})
+  }
+  const {nombre,apellido,email, direccion, mensaje,telefono} = req.body
+  const id = req.session.user.id
+
+  try {
+    let query = 'UPDATE all_users SET nombre = ?, apellido = ?, email = ?, direccion = ?, mensaje = ?, telefono = ? WHERE id = ?'
+    let valores = [nombre, apellido, email, direccion, mensaje, telefono,id]
+    await pool.query(query, valores)
+    res.json({mensaje:"Se actualizo el perfil correctamente"})
+
+
+  }catch (error) {
+    console.log(error)
+    res.status(500).json({mensaje:"error al intentar actualizar el perfil"})
+  } 
+
+
+})
 
 app.listen(PORT, () => {
   console.log("Servidor corriendo en el puerto 3000");

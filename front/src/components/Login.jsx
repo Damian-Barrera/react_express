@@ -9,12 +9,12 @@ import UserContext from "../context/UserContext.jsx";
 const Login = () => {
 
     const navigate = useNavigate();
-    
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const { setUsuario, usuario } = useContext(UserContext);
-console.log(usuario)
+    // console.log(usuario)
     const logearse = async (e) => {
         e.preventDefault();
 
@@ -23,7 +23,7 @@ console.log(usuario)
         try {
             const respuesta = await iniciarSesion(losDatos)
             if (respuesta.mensaje === "login exitoso") {
-                setUsuario(respuesta.usuario); 
+                setUsuario(respuesta.usuario);
                 navigate('/dashboard')
             }
             else {

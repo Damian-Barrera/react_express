@@ -10,10 +10,10 @@ const Dashboard = () => {
     const { usuario, cargando } = useContext(UserContext);
 
     useEffect(() => {
-        if(!cargando && !usuario){
+        if (!cargando && !usuario) {
             navigate("/")
         }
-    }, [usuario])
+    }, [cargando, usuario])
 
     return (
         <>
@@ -33,10 +33,11 @@ const Dashboard = () => {
 
                 <p>
                     {usuario && usuario.is_admin ? "User Admin" : "User común"}
-                 </p>
+                </p>
+                <NavLink to="/about" className="edit-profile"> Editar Perfil </NavLink>
 
                 <Atras />
- 
+
             </div>
             <div>
                 <CerrarSesion />

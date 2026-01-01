@@ -4,3 +4,6 @@
 
 --Agregar boton para cerrar la sesion y que la destruya. Pero tambien deberia haber alguna validacion que verifique que haya esa sesion y si no existe que redirija al login--
 **Hecho **
+
+--Hacer la pagina para la modificacion de datos en el about.js
+*** Hecha ***

@@ -1,0 +1,8 @@
+{
+  "build": {
+    "workingDirectory": "back"
+  },
+  "deploy": {
+    "workingDirectory": "back"
+  }
+}

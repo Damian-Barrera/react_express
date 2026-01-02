@@ -1,49 +1,57 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import pool from "./db_config.js";
 import bcrypt from "bcrypt";
 import session from "express-session";
+import path from "path";
 
-const PORT = 3000;
+const __dirname = path.resolve();
+
+const PORT = process.env.PORT || 3000; 
+
 const app = express();
+app.set("trust proxy", 1);
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true, //modificar esta ruta en producción
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
   })
 );
 
-app.use(express.static("public"));
+
+app.use(express.static("public")); //Desarrollo
+// app.use(express.static(path.join(__dirname, "../front/dist"))); //Producción 
+
+
 
 app.use(
   session({
-    secret: "practico integrador react-express",
+    secret: "process.env.SESSION_SECRET",
     resave: false,
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 10,
-      secure: false,   // NECESARIO en localhost
+      secure: process.env.NODE_ENV === "production", // NECESARIO en localhost
       httpOnly: true,
-      sameSite: "lax"
-    }
+      sameSite: "lax",
+    },
   })
 );
-
-
-
 
 // app.use(express.static("."));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/configuracion", (req, res) => {
-  res.sendFile("config.html", { root: '.' }); //Usar el servidor 3000
-})
+  res.sendFile("config.html", { root: "." }); //Usar el servidor 3000
+});
 
 app.post("/api/registro", async (req, res) => {
   const { nombre, apellido, email, password, password2 } = req.body;
 
-  console.log(nombre, apellido, email, password, password2);
+  // console.log(nombre, apellido, email, password, password2);
 
   // Validaciones
 
@@ -90,32 +98,30 @@ app.post("/api/login", async (req, res) => {
     const [user] = await pool.query("SELECT * FROM all_users WHERE email = ?", [
       email,
     ]);
-    console.log(user);
+    // console.log(user);
     if (user.length === 0) {
       return res.status(404).json({ mensaje: "usuario no encontrado" });
     }
     //comparamos las contraseñas
     const validPass = await bcrypt.compare(password, user[0].password);
 
-      if(!validPass){
-        return res.status(401).json({mensaje:"contraseña incorrecta"})
-      }
+    if (!validPass) {
+      return res.status(401).json({ mensaje: "contraseña incorrecta" });
+    }
 
-      //Si todo esta bien
-      req.session.user = {
-        id:user[0].id,
-        is_admin: user[0].is_admin  
-      }
-      res.json({mensaje: "login exitoso", usuario: user[0]});
-
+    //Si todo esta bien
+    req.session.user = {
+      id: user[0].id,
+      is_admin: user[0].is_admin,
+    };
+    res.json({ mensaje: "login exitoso", usuario: user[0] });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({mensaje:"error en el servidor"})
+    console.log(error);
+    res.status(500).json({ mensaje: "error en el servidor" });
   }
 });
 
 app.get("/api/me", async (req, res) => {
-  
   if (!req.session.user) {
     return res.json({ usuario: null });
   }
@@ -124,7 +130,7 @@ app.get("/api/me", async (req, res) => {
     const id = req.session.user.id;
 
     const [rows] = await pool.query(
-      "SELECT id, nombre, apellido, email,mensaje, telefono , direccion is_admin FROM all_users WHERE id = ?",
+      "SELECT id, nombre, apellido, email,mensaje, telefono , direccion, is_admin FROM all_users WHERE id = ?",
       [id]
     );
 
@@ -142,38 +148,39 @@ app.get("/api/me", async (req, res) => {
 //Cerrando la sesion
 
 app.post("/api/logout", (req, res) => {
-  req.session.destroy( err => {
-    if(err){
-      return res.status(500).json({mensaje:"no se pudo cerrar la sesión"})
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ mensaje: "no se pudo cerrar la sesión" });
     }
-    res.clearCookie("connect.sid"); 
-    res.json({mensaje:"sesión cerrada correctamente"})
-  } )
-})
+    res.clearCookie("connect.sid");
+    res.json({ mensaje: "sesión cerrada correctamente" });
+  });
+});
 
 //Actualizar perfil
 
-app.put("/api/edit" , async (req, res) => {
-  if(!req.session.user) {
-    return res.status(401).json({mensaje: "No autorizado"})
+app.put("/api/edit", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ mensaje: "No autorizado" });
   }
-  const {nombre,apellido,email, direccion, mensaje,telefono} = req.body
-  const id = req.session.user.id
+  const { nombre, apellido, email, direccion, mensaje, telefono } = req.body;
+  const id = req.session.user.id;
 
   try {
-    let query = 'UPDATE all_users SET nombre = ?, apellido = ?, email = ?, direccion = ?, mensaje = ?, telefono = ? WHERE id = ?'
-    let valores = [nombre, apellido, email, direccion, mensaje, telefono,id]
-    await pool.query(query, valores)
-    res.json({mensaje:"Se actualizo el perfil correctamente"})
+    let query =
+      "UPDATE all_users SET nombre = ?, apellido = ?, email = ?, direccion = ?, mensaje = ?, telefono = ? WHERE id = ?";
+    let valores = [nombre, apellido, email, direccion, mensaje, telefono, id];
+    await pool.query(query, valores);
+    res.json({ mensaje: "Se actualizo el perfil correctamente" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ mensaje: "error al intentar actualizar el perfil" });
+  }
+});
 
-
-  }catch (error) {
-    console.log(error)
-    res.status(500).json({mensaje:"error al intentar actualizar el perfil"})
-  } 
-
-
-})
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../front/dist/index.html"));
+// });
 
 app.listen(PORT, () => {
   console.log("Servidor corriendo en el puerto 3000");

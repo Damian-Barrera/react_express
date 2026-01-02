@@ -26,9 +26,9 @@ const Dashboard = () => {
 
                 <h3>Este es el dashboard principal !</h3>
                 {usuario && (
-                    <h4>Bienvenido {usuario.nombre}</h4>
+                    <h4>Bienvenido {usuario.nombre} {usuario.apellido} </h4>
                 )}
-                {/* <p> {usuario.email} </p> */}
+                {usuario && <p>{usuario.direccion} </p>}
                 {usuario && <p>{usuario.email}</p>}
 
                 <p>

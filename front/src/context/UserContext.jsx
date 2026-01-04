@@ -1,3 +1,4 @@
+const API_URL = import.meta.env.VITE_API_URL;
 import { createContext, useState,useEffect } from "react";
 
 const UserContext = createContext();
@@ -9,7 +10,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const verificarSesion = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/me", {
+        const res = await fetch(`${API_URL}/api/me`, {
           credentials: "include", // NECESARIO para enviar la cookie de sesión
         });
 

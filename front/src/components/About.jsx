@@ -1,3 +1,5 @@
+
+const API_URL = import.meta.env.VITE_API_URL;
 import Atras from "./Atras"
 import CerrarSesion from "./CerrarSesion"
 import { NavLink } from "react-router-dom"
@@ -38,7 +40,7 @@ const About = () => {
     const editar = async (e) => {
         e.preventDefault()
 
-        const res = await fetch("http://localhost:3000/api/edit", {
+        const res = await fetch(`${API_URL}/api/edit`, {
             method: "PUT",
             credentials: "include",
             headers: { "Content-Type": "application/json" },

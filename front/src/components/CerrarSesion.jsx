@@ -1,3 +1,4 @@
+const API_URL = import.meta.env.VITE_API_URL;
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
@@ -10,7 +11,7 @@ const CerrarSesion = () => {
 
     const logout = async () => {
         try {
-            await fetch("http://localhost:3000/api/logout", {
+            await fetch(`${API_URL}/api/logout`, {
                 method: "POST",
                 credentials: "include"
             })

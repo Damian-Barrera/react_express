@@ -1,6 +1,9 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 const registrarUsuario = async (datos) => {
   try {
-    const res = await fetch("http://localhost:3000/api/registro", {
+    const res = await fetch(`{${API_URL}/api/registro}`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(datos),
@@ -15,7 +18,7 @@ export default registrarUsuario;
 
 export const iniciarSesion = async (datos) => {
   try {
-    const res = await fetch("http://localhost:3000/api/login", {
+    const res = await fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(datos),

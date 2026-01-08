@@ -3,7 +3,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const registrarUsuario = async (datos) => {
   try {
-    const res = await fetch(`{${API_URL}/api/registro}`, {
+    const res = await fetch(`${API_URL}/api/registro}`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(datos),

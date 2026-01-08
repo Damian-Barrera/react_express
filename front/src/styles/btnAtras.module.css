@@ -27,3 +27,33 @@
   transform: translateY(0);
   box-shadow: 0 3px 5px #00000033;
 }
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .atras {
+    margin-top: 15px;
+    margin-bottom: 8px;
+  }
+
+  .atras button {
+    padding: 9px 18px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  .atras {
+    margin-top: 12px;
+    margin-bottom: 6px;
+  }
+
+  .atras button {
+    width: 100%;
+    max-width: 280px;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}

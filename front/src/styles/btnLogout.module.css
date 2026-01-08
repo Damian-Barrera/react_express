@@ -27,3 +27,31 @@
   transform: translateY(0);
   box-shadow: 0 3px 5px #00000033;
 }
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .exit {
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+
+  .exit button {
+    padding: 9px 18px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  .exit {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .exit button {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+}

@@ -122,3 +122,71 @@ a:hover {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
   text-decoration: none;
 }
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .home {
+    font-size: 1.6rem;
+  }
+
+  .home a {
+    font-size: 1.3rem;
+  }
+
+  .menu {
+    font-size: 1.6rem;
+    margin-top: 30px;
+  }
+
+  .formulario {
+    width: 70%;
+    padding: 20px;
+  }
+
+  .main-title {
+    font-size: 1.6rem;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  body {
+    padding-left: 0;
+  }
+
+  .home {
+    font-size: 1.4rem;
+    margin: 8px;
+  }
+
+  .home a {
+    font-size: 1.1rem;
+  }
+
+  .menu {
+    font-size: 1.3rem;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .background {
+    height: auto;
+    padding: 20px 0;
+  }
+
+  .formulario {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .formulario label {
+    font-size: 1rem;
+  }
+
+  .edit-profile {
+    width: 100%;
+    text-align: center;
+  }
+}
